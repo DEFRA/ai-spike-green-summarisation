@@ -1,70 +1,54 @@
-# Green Summarization Engine - Mini-POC
+# Green Summarisation Engine - Mini-POC
 
-**Duration**: `2025-01-08` - `2025-02-14`
+This repository contains an experimental PoC investigating whether smaller transformer models can be used for text summarisation as a more sustainable and cost-effective alternative to cloud-based LLMs.
 
-**Status**: Completed
+## Prerequisites
 
-## The Problem
-
-Previous PoCs have demonstrated that large language models (LLMs) can deliver high-quality text summarisation
-
-## The Hypothesis
-
-We can use non-LLM models for summarising documents or meeting transcripts.
-
-### What we aim to discover
-* Can we achieve comparable summarisation quality with smaller, local models?
-* How do we score the quality of summaries?
-* What are the cost and latency implications of using local models vs cloud-based LLMs?
-
-### If it works
-* We can reduce reliance on cloud-based LLMs for summarisation tasks.
-* More sustainable and green solution for text summarisation.
-* Potential time / cost savings with local inference.
-
-## Assumptions
-* Smaller transformer models can be run locally with acceptable performance
-* Summarisation quality can be objectively measured using established metrics
-
-## Outcomes
-* Smaller transformers can be used for text summarisation but it is highly dependent on the expectations of the summary.
-   * For concise summaries, the tested transformer models produced smaller but semantically similar summaries to the LLM baseline.
-   * Output limits of the transformer models meant that longer, more detailed summaries were not achievable.
-* A pre-requisite before this approach can be iterated on is to establish a validation / evaluation strategy for summary quality.
-
-## Shortcomings
-* Limited to just two models due to time constraints.
-* Local model inference with CPU only - GPU would significantly improve performance.
-* Evaluation metrics used (ROUGE, BERTScore) may not fully capture summary quality.
-
-## Running the Notebook
-
-The main analysis is in [notebooks/transformer.ipynb](notebooks/transformer.ipynb).
-
-### Prerequisites
-
-- Python environment with Jupyter notebook support
-- Access to an Azure OpenAI resource with the Phi-4 model
+- [Python](https://docs.python.org/3/using/index.html) - Python environment with Jupyter notebook support
+- [Azure OpenAI Access](https://azure.microsoft.com/en-us/products/ai-services/openai-service) - Access to an Azure OpenAI resource with the Phi-4 model
 - Local machine with sufficient resources to run transformer models
+
+## Setup
+
+### Environment Variables
+
+This project uses a `.env` file stored in the root directory to manage environment variables. Create a `.env` file with the following variables:
+
+```bash
+AZURE_OPENAI_API_KEY=your_azure_openai_api_key
+AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
+OPENAI_API_VERSION=2024-02-15
+```
+
+Below is a description of the environment variables:
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `AZURE_OPENAI_API_KEY` | Yes | None | API key for accessing Azure OpenAI |
+| `AZURE_OPENAI_ENDPOINT` | Yes | None | Endpoint URL for your Azure OpenAI resource |
+| `OPENAI_API_VERSION` | Yes | `2024-02-15` | API version for Azure OpenAI |
+
+### Dependencies
+
+Open the notebook in VS Code or Jupyter Lab and run the first code cell to install all required dependencies:
+- Web scraping: `beautifulsoup4`, `lxml`, `markdownify`
+- Visualisation: `seaborn`, `matplotlib`
+- AI/ML: `transformers[torch]`, `pydantic-ai-slim[openai]`, `python-dotenv`, `openai`, `chonkie`
+- Evaluation: `torchmetrics`
+
+### VS Code Setup
+
+If you are running the notebooks in VS Code, we recommend installing the following extensions:
+- [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) - For Python language support.
+- [Jupyter](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) - For Jupyter notebook support.
+
+## Notebooks
+
+The main analysis is contained in [notebooks/transformer.ipynb](notebooks/transformer.ipynb).
 
 ### Models Under Test
 
 1. **Microsoft Phi-4** (via Azure OpenAI) - Cloud-based LLM baseline
 2. **Facebook BART-large-CNN** - Local transformer model fine-tuned for summarisation
 
-### Setup
-
-1. Create a `.env` file in the root directory with the following:
-   ```bash
-   AZURE_OPENAI_API_KEY=your_azure_openai_api_key
-   AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
-   OPENAI_API_VERSION=2024-02-15
-   ```
-
-2. Open the notebook in VS Code or Jupyter Lab
-
-3. Run the first code cell to install all required dependencies:
-   - Web scraping: `beautifulsoup4`, `lxml`, `markdownify`
-   - Visualisation: `seaborn`, `matplotlib`
-   - AI/ML: `transformers[torch]`, `pydantic-ai-slim[openai]`, `python-dotenv`, `openai`, `chonkie`
-   - Evaluation: `torchmetrics`
+Further documentation is provided within the notebook and in the [Experiment Writeup](experiment-writeup.md).
